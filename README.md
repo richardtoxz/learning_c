@@ -9,7 +9,7 @@ O programa implementa as seguintes funcionalidades:
 *   Leitura de dados de um arquivo CSV especificado pelo usuário.
 *   Suporte para arquivos CSV com campos de ID (inteiro), Descrição (string) e Valor (float).
 *   Solicitação ao usuário para escolher a coluna de ordenação (ID, Descrição ou Valor).
-*   Ordenação dos dados utilizando o algoritmo Quicksort (função `qsort` da biblioteca padrão).
+*   Ordenação dos dados utilizando o algoritmo Bubblesort (função `bubblesort` da biblioteca padrão).
 *   Geração de um novo arquivo CSV com os dados ordenados, com nome definido pelo usuário.
 
 ## Arquivos no Repositório
@@ -18,7 +18,6 @@ O programa implementa as seguintes funcionalidades:
 *   `entrada.csv`: Arquivo CSV de exemplo para teste.
 *   `especificacao.md`: Documento detalhando a especificação do projeto, incluindo objetivo, entrada/saída, algoritmo de ordenação, estrutura do código e desafios.
 *   `README.md`: Este arquivo.
-*   `.gitignore`: Especifica arquivos a serem ignorados pelo Git (como o executável compilado).
 
 ## Como Compilar e Executar
 
