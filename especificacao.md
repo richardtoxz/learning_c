@@ -2,7 +2,7 @@
 
 ## 1. Objetivo da Solução
 
-O objetivo principal deste projeto é desenvolver um programa em linguagem C capaz de ler dados de um arquivo CSV (Comma-Separated Values), ordenar esses dados com base em uma coluna especificada pelo usuário e, por fim, gerar um novo arquivo CSV contendo os dados ordenados. Esta ferramenta visa facilitar a manipulação e organização de dados tabulares armazenados em formato CSV, uma tarefa comum em diversas aplicações.
+O objetivo principal deste projeto é desenvolver um programa em linguagem C capaz de ler dados de um arquivo CSV (Comma-Separated Values), ordenar esses dados com base em uma coluna especificada pelo usuário e, por fim, gerar um novo arquivo CSV contendo os dados ordenados. Esta ferramenta visa facilitar a manipulação e organização de dados tabulares armazenados em formato CSV.
 
 ## 2. Descrição da Entrada e Saída de Dados
 
@@ -28,18 +28,17 @@ O objetivo principal deste projeto é desenvolver um programa em linguagem C cap
 
 ## 3. Algoritmo de Ordenação Utilizado
 
-Para a ordenação dos dados, foi utilizada a função `qsort` da biblioteca padrão do C (`stdlib.h`). `qsort` é uma implementação eficiente do algoritmo Quicksort.
+Para a ordenação dos dados, foi utilizada a função `bubblesort` implementada manualmente em C. O Bubble Sort é um algoritmo simples de ordenação.
 
-*   **Funcionamento:** A função `qsort` requer:
+*   **Funcionamento:** A função `bubblesort` requer:
     1.  Um ponteiro para o início do array de dados a ser ordenado (no caso, nosso vetor de `Registro`).
     2.  O número de elementos no array (`num_registros`).
-    3.  O tamanho de cada elemento em bytes (`sizeof(Registro)`).
-    4.  Uma função de comparação que determina a ordem entre dois elementos.
+    3.  Um ponteiro para a função de comparação que determina a ordem entre dois elementos.
 *   **Funções de Comparação:** Foram implementadas três funções de comparação distintas, uma para cada coluna do exemplo (`ID`, `Descricao`, `Valor`):
     *   `comparar_id`: Compara dois registros com base no campo `id` (ordem numérica crescente).
     *   `comparar_descricao`: Compara dois registros com base no campo `descricao` (ordem alfabética usando `strcmp`).
     *   `comparar_valor`: Compara dois registros com base no campo `valor` (ordem numérica crescente).
-*   **Seleção:** A função `ordenar_registros` utiliza uma estrutura `switch` para selecionar a função de comparação apropriada com base na coluna escolhida pelo usuário antes de chamar `qsort`.
+*   **Seleção:** A função `ordenar_registros` utiliza uma estrutura `switch` para selecionar a função de comparação apropriada com base na coluna escolhida pelo usuário antes de chamar `bubblesort`.
 
 ## 4. Estrutura do Código e Principais Funções Implementadas
 
@@ -60,9 +59,9 @@ O código foi estruturado em um único arquivo (`main.c`) para simplicidade, mas
     *   Inclui tratamento básico de erros (falha ao abrir arquivo, falha de alocação).
 *   **`ordenar_registros()`:**
     *   Recebe o array de registros, o número de registros e a coluna de ordenação.
-    *   Chama `qsort` com a função de comparação apropriada (selecionada via `switch`).
+    *   Chama `bubblesort` com a função de comparação apropriada (selecionada via `switch`).
 *   **`comparar_id()`, `comparar_descricao()`, `comparar_valor()`:**
-    *   Funções auxiliares de comparação usadas por `qsort` para determinar a ordem relativa de dois registros com base em um campo específico.
+    *   Funções auxiliares de comparação usadas por `bubblesort` para determinar a ordem relativa de dois registros com base em um campo específico.
 *   **`escrever_csv()`:**
     *   Responsável por criar e escrever no arquivo CSV de saída.
     *   Itera sobre o array de registros (agora ordenado) e escreve cada registro no arquivo usando `fprintf` no formato CSV.
@@ -75,7 +74,7 @@ O código foi estruturado em um único arquivo (`main.c`) para simplicidade, mas
 *   **Alocação Dinâmica de Memória:** O número de registros no CSV não é conhecido a priori. Foi necessário usar alocação dinâmica (`malloc` e `realloc`) para o array de `Registro`.
     *   **Solução Adotada:** Implementou-se uma estratégia de realocação que dobra a capacidade do array quando ele fica cheio. Verificações foram adicionadas para tratar possíveis falhas de alocação.
 *   **Dependência de Compilador:** Durante o teste inicial, verificou-se que o compilador C (`gcc`) não estava instalado no ambiente.
-    *   **Solução Adotada:** O pacote `build-essential` (que inclui `gcc`, `make` e outras ferramentas) foi instalado usando o gerenciador de pacotes `apt`.
+    *   **Solução Adotada:** O pacote `build-essential` (que inclui `gcc`, `make` e outras ferramentas) foi instalado.
 *   **Tratamento de Tipos na Ordenação:** A ordenação precisa tratar corretamente diferentes tipos de dados (inteiros, strings, floats).
     *   **Solução Adotada:** Foram criadas funções de comparação específicas para cada tipo de dado, garantindo que a lógica de comparação seja apropriada (subtração para números, `strcmp` para strings).
 

@@ -37,8 +37,3 @@ O programa implementa as seguintes funcionalidades:
     *   O número da coluna para ordenar (0 para ID, 1 para Descrição, 2 para Valor).
     *   O nome do arquivo CSV de saída (ex: `saida_id.csv`).
 
-## Observações
-
-*   O parser de CSV implementado em `ler_csv` é básico e pode não funcionar corretamente com arquivos CSV complexos (ex: campos com vírgulas internas, aspas).
-*   O exemplo de estrutura `Registro` em `main.c` assume 3 colunas (int, string, float). Adapte a estrutura e as funções de parsing/comparação se o seu CSV tiver um formato diferente.
-

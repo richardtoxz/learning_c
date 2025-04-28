@@ -18,6 +18,7 @@ int comparar_id(const void *a, const void *b);
 int comparar_descricao(const void *a, const void *b);
 int comparar_valor(const void *a, const void *b);
 int escrever_csv(const char *nome_arquivo, Registro *registros, int num_registros);
+void bubblesort(Registro *registros, int num_registros, int (*comparar)(const void *, const void *));
 
 int main() {
     char nome_arquivo_entrada[MAX_CAMPO];
@@ -39,7 +40,7 @@ int main() {
     }
 
     if (num_registros == 0) {
-        printf("Arquivo CSV vazio ou inválido.\n");
+        printf("Arquivo CSV vazio ou invalido.\n");
         free(registros);
         return 1;
     }
@@ -51,17 +52,17 @@ int main() {
     printf("  0 = ID\n");
     printf("  1 = Descricao\n");
     printf("  2 = Valor\n");
-    printf("Digite o número da coluna: ");
+    printf("Digite o numero da coluna: ");
     char buffer[16];
     if (!fgets(buffer, sizeof(buffer), stdin)) {
-        fprintf(stderr, "Erro ao ler a coluna de ordenação.\n");
+        fprintf(stderr, "Erro ao ler a coluna de ordenacao.\n");
         free(registros);
         return 1;
     }
     coluna_ordem = atoi(buffer);
 
     if (coluna_ordem < 0 || coluna_ordem > 2) { 
-        fprintf(stderr, "Coluna inválida selecionada.\n");
+        fprintf(stderr, "Coluna invalida selecionada.\n");
         free(registros);
         return 1;
     }
@@ -69,21 +70,21 @@ int main() {
     ordenar_registros(registros, num_registros, coluna_ordem);
     printf("Registros ordenados pela coluna %d.\n", coluna_ordem);
  
-    printf("Digite o nome do arquivo CSV de saída: ");
+    printf("Digite o nome do arquivo CSV de saida: ");
     if (!fgets(nome_arquivo_saida, sizeof(nome_arquivo_saida), stdin)) {
-        fprintf(stderr, "Erro ao ler o nome do arquivo de saída.\n");
+        fprintf(stderr, "Erro ao ler o nome do arquivo de saida.\n");
         free(registros);
         return 1;
     }
     nome_arquivo_saida[strcspn(nome_arquivo_saida, "\n")] = 0; 
 
     if (!escrever_csv(nome_arquivo_saida, registros, num_registros)) {
-        fprintf(stderr, "Erro ao escrever o arquivo CSV de saída.\n");
+        fprintf(stderr, "Erro ao escrever o arquivo CSV de saida.\n");
         free(registros);
         return 1;
     }
 
-    printf("Arquivo CSV de saída '%s' gerado com sucesso.\n", nome_arquivo_saida);
+    printf("Arquivo CSV de saida '%s' gerado com sucesso.\n", nome_arquivo_saida);
 
     free(registros);
 
@@ -101,7 +102,7 @@ int ler_csv(const char *nome_arquivo, Registro **registros, int *num_registros) 
     int capacidade = 10;
     *registros = (Registro *)malloc(capacidade * sizeof(Registro));
     if (!*registros) {
-        fprintf(stderr, "Erro de alocação de memória.\n");
+        fprintf(stderr, "Erro de alocacao de memoria.\n");
         fclose(arquivo);
         return 0;
     }
@@ -112,7 +113,7 @@ int ler_csv(const char *nome_arquivo, Registro **registros, int *num_registros) 
             capacidade *= 2;
             Registro *temp = (Registro *)realloc(*registros, capacidade * sizeof(Registro));
             if (!temp) {
-                fprintf(stderr, "Erro de realocação de memória.\n");
+                fprintf(stderr, "Erro de realocacao de memoria.\n");
                 free(*registros);
                 fclose(arquivo);
                 return 0;
@@ -126,7 +127,7 @@ int ler_csv(const char *nome_arquivo, Registro **registros, int *num_registros) 
                    &((*registros)[*num_registros].valor)) == 3) {
             (*num_registros)++;
         } else {
-             fprintf(stderr, "Aviso: Linha ignorada devido a formato inválido: %s", linha);
+             fprintf(stderr, "Aviso: Linha ignorada devido a formato invalido: %s", linha);
         }
     }
 
@@ -137,16 +138,16 @@ int ler_csv(const char *nome_arquivo, Registro **registros, int *num_registros) 
 void ordenar_registros(Registro *registros, int num_registros, int coluna_ordem) {
     switch (coluna_ordem) {
         case 0:
-            qsort(registros, num_registros, sizeof(Registro), comparar_id);
+            bubblesort(registros, num_registros, comparar_id);
             break;
         case 1:
-            qsort(registros, num_registros, sizeof(Registro), comparar_descricao);
+            bubblesort(registros, num_registros, comparar_descricao);
             break;
         case 2:
-            qsort(registros, num_registros, sizeof(Registro), comparar_valor);
+            bubblesort(registros, num_registros, comparar_valor);
             break;
         default:
-            fprintf(stderr, "Coluna de ordenação inválida.\n");
+            fprintf(stderr, "Coluna de ordenacao invalida.\n");
             break;
     }
 }
@@ -174,7 +175,7 @@ int comparar_valor(const void *a, const void *b) {
 int escrever_csv(const char *nome_arquivo, Registro *registros, int num_registros) {
     FILE *arquivo = fopen(nome_arquivo, "w");
     if (!arquivo) {
-        perror("Erro ao abrir arquivo de saída");
+        perror("Erro ao abrir arquivo de saida");
         return 0;
     }
 
@@ -191,3 +192,14 @@ int escrever_csv(const char *nome_arquivo, Registro *registros, int num_registro
     return 1;
 }
 
+void bubblesort(Registro *registros, int num_registros, int (*comparar)(const void *, const void *)) {
+    for (int i = 0; i < num_registros - 1; i++) {
+        for (int j = 0; j < num_registros - i - 1; j++) {
+            if (comparar(&registros[j], &registros[j + 1]) > 0) {
+                Registro temp = registros[j];
+                registros[j] = registros[j + 1];
+                registros[j + 1] = temp;
+            }
+        }
+    }
+}
